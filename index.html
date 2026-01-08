@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Member Selection</title>
+  <title>Member Assignment</title>
   <style>
     button {
       display: block;
@@ -23,52 +23,50 @@
 
 <h3>Click a Member</h3>
 <div id="buttons"></div>
-
 <div id="result"></div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
 
     const members = [
       "Ramesh", "Mounica", "saurabh", "ranjit", "aush",
       "Purna", "Arvoind", "shimbu", "nag", "priyanka"
     ];
 
-    let availableTargets = [...members];
+  let availableTargets = [...members];
+  const resultDiv = document.getElementById("result");
+  const container = document.getElementById("buttons");
 
-    const container = document.getElementById("buttons");
-    const resultDiv = document.getElementById("result");
+  members.forEach(member => {
+    const btn = document.createElement("button");
+    btn.textContent = member;
 
-    members.forEach(function (name) {
-      const btn = document.createElement("button");
-      btn.textContent = name;
+    btn.onclick = () => {
 
-      btn.addEventListener("click", function () {
+      // Remove self from possible targets
+      let validTargets = availableTargets.filter(p => p !== member);
 
-        // Remove clicked person from available list
-        availableTargets = availableTargets.filter(p => p !== name);
-
-        if (availableTargets.length === 0) {
-          resultDiv.textContent = "No members left to assign.";
-          btn.disabled = true;
-          return;
-        }
-
-        // Pick random person
-        const randomIndex = Math.floor(Math.random() * availableTargets.length);
-        const selectedPerson = availableTargets[randomIndex];
-
-        // Show result
-        resultDiv.textContent = name + " → " + selectedPerson;
-
-        // Disable button after click
+      if (validTargets.length === 0) {
+        resultDiv.textContent = "Assignment complete. No valid targets left.";
         btn.disabled = true;
-      });
+        return;
+      }
 
-      container.appendChild(btn);
-    });
+      // Pick random valid target
+      const index = Math.floor(Math.random() * validTargets.length);
+      const target = validTargets[index];
 
+      // Remove target permanently (NO repeat)
+      availableTargets = availableTargets.filter(p => p !== target);
+
+      resultDiv.textContent = `${member} → ${target}`;
+      btn.disabled = true;
+    };
+
+    container.appendChild(btn);
   });
+
+});
 </script>
 
 </body>
