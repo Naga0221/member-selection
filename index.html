@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Member Selection</title>
+  <style>
+    button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
+      font-size: 16px;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+
+<body>
+
+<h3>Click a Member</h3>
+<div id="buttons"></div>
+
+<div id="result"></div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+
+    const members = [
+      "Ramesh", "Mounica", "saurabh", "ranjit", "aush",
+      "Purna", "Arvoind", "shimbu", "nag", "priyanka"
+    ];
+
+    let availableTargets = [...members];
+
+    const container = document.getElementById("buttons");
+    const resultDiv = document.getElementById("result");
+
+    members.forEach(function (name) {
+      const btn = document.createElement("button");
+      btn.textContent = name;
+
+      btn.addEventListener("click", function () {
+
+        // Remove clicked person from available list
+        availableTargets = availableTargets.filter(p => p !== name);
+
+        if (availableTargets.length === 0) {
+          resultDiv.textContent = "No members left to assign.";
+          btn.disabled = true;
+          return;
+        }
+
+        // Pick random person
+        const randomIndex = Math.floor(Math.random() * availableTargets.length);
+        const selectedPerson = availableTargets[randomIndex];
+
+        // Show result
+        resultDiv.textContent = name + " → " + selectedPerson;
+
+        // Disable button after click
+        btn.disabled = true;
+      });
+
+      container.appendChild(btn);
+    });
+
+  });
+</script>
+
+</body>
+</html>
